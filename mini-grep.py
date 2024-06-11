@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import re as regex
 import fileinput
@@ -29,7 +31,7 @@ def compile_regex(pattern):
     try:
         return regex.compile(pattern)
     except regex.error as error:
-        return error.msg
+        return None
 
 
 if __name__ == '__main__':
@@ -65,8 +67,8 @@ if __name__ == '__main__':
     
     pattern = compile_regex(args.e)
     
-    if pattern is not regex.Pattern:
-        print(''.join(['Regular expression error:', pattern]))
+    if not pattern:
+        print('Regular expression error')
         sys.exit(1)
 
     files = args.FILE
