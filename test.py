@@ -58,17 +58,33 @@ class TestMiniGrep(unittest.TestCase):
             ]
         )
 
+    def test_incorrect_regex(self):
+        self.assertIsNot(compile_regex('\\Jskdf'), re.Pattern)
+        self.assertIsNot(compile_regex(')aeiou'), re.Pattern)
+
     def test_stdin(self):
         output = subprocess.getoutput(
                         ['./mini-grep.py -e budową, < ./test_texts/tadeusz'],
                         )
         self.assertEqual(output,
                          '398 Okazały budową, poważny ogromem,')
-        
-    def test_incorrect_regex(self):
-        self.assertIsNot(compile_regex('\\Jskdf'), re.Pattern)
-        self.assertIsNot(compile_regex(')aeiou'), re.Pattern)
 
+    def test_parameters(self):
+        output = subprocess.getoutput(
+                        ['./mini-grep.py -e aeiouy -r'],
+                        )
+        self.assertEqual(
+            output,
+            'usage: mini-grep [-h] [-q] -e PATTERN [FILE ...]\nmini-grep: error: unrecognized arguments: -r'
+            )
+        
+        output = subprocess.getoutput(
+                ['./mini-grep.py ./test_texts/tadeusz'],
+                )
+        self.assertEqual(
+            output,
+            'usage: mini-grep [-h] [-q] -e PATTERN [FILE ...]\nmini-grep: error: the following arguments are required: -e'
+            )
 
 if __name__ == '__main__':
     unittest.main()

@@ -30,7 +30,7 @@ def search(file_paths, pattern, line_nums):
 def compile_regex(pattern):
     try:
         return regex.compile(pattern)
-    except regex.error as error:
+    except regex.error:
         return None
 
 
